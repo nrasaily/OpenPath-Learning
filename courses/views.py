@@ -19,6 +19,7 @@ class CourseOfferingListView(generics.ListAPIView):
     queryset = CourseOffering.objects.filter(
         is_open=True,
         course__is_published=True,
+        term__status="open",
     ).select_related("course", "term").order_by("course__title")
     serializer_class = CourseOfferingSerializer
     permission_classes = [AllowAny]
@@ -70,3 +71,4 @@ class CourseDetailView(generics.RetrieveAPIView):
     queryset = Course.objects.filter(is_published=True)
     serializer_class = CourseSerializer
     permission_classes = [AllowAny]
+

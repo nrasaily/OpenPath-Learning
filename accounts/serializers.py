@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from django.contrib.auth.models import Group
 from .models import User
 
 
@@ -17,7 +17,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        user = User.objects.create_user(**validated_data)
+        student_group, _ = Group.objects.get_or_create(name="student")
+        user.groups.add(student_group)
+        return user
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
